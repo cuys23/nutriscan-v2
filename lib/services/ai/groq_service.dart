@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:nutriscan/config/api_config.dart';
 import 'package:nutriscan/models/chat_message.dart';
 import 'package:nutriscan/models/meal_plan.dart';
+import 'package:nutriscan/services/ai/image_prepare.dart';
 
 class GroqService {
   static String get _model => ApiConfig.groqModel;
@@ -51,13 +52,6 @@ class GroqService {
           'status': e.code,
         });
     }
-  }
-
-  static String _mimeTypeFromFile(File file) {
-    final path = file.path.toLowerCase();
-    if (path.endsWith('.png')) return 'image/png';
-    if (path.endsWith('.webp')) return 'image/webp';
-    return 'image/jpeg';
   }
 
   static int? _findMatchingBraceEnd(String content, int start) {
@@ -124,9 +118,7 @@ class GroqService {
       int fileSize = await imageFile.length();
       if (fileSize > 10 * 1024 * 1024) return false;
 
-      final imageBytes = await imageFile.readAsBytes();
-      final base64Image = base64Encode(imageBytes);
-      final mimeType = _mimeTypeFromFile(imageFile);
+      final imageDataUrl = await ImagePrepare.processAndEncodeImage(imageFile);
       final prompt = _getFoodValidationPrompt(language);
 
       final requestBody = {
@@ -138,7 +130,7 @@ class GroqService {
               {"type": "text", "text": prompt},
               {
                 "type": "image_url",
-                "image_url": {"url": "data:$mimeType;base64,$base64Image"},
+                "image_url": {"url": imageDataUrl},
               },
             ],
           },
@@ -258,15 +250,10 @@ class GroqService {
         throw Exception(getLocalizedErrorMessage('no_internet', language));
       }
 
-      // Compress image if larger than 1MB to reduce API payload.
-      // ponytail: _compressImageBytes is still a stub that returns the
-      // original bytes — real resize/encode lands with ImagePrepare.
-      List<int> imageBytes = await imageFile.readAsBytes();
-      if (imageBytes.length > 1024 * 1024) {
-        imageBytes = await _compressImageBytes(imageFile);
-      }
-      final base64Image = base64Encode(imageBytes);
-      final mimeType = _mimeTypeFromFile(imageFile);
+      // Compress unconditionally rather than only above a size threshold:
+      // a 900KB photo is still far larger than the model needs, and the old
+      // gate guarded a stub that returned the original bytes anyway.
+      final imageDataUrl = await ImagePrepare.processAndEncodeImage(imageFile);
       final prompt = _getLocalizedPrompt(language);
 
       final requestBody = {
@@ -278,7 +265,7 @@ class GroqService {
               {"type": "text", "text": prompt},
               {
                 "type": "image_url",
-                "image_url": {"url": "data:$mimeType;base64,$base64Image"},
+                "image_url": {"url": imageDataUrl},
               },
             ],
           },
@@ -613,34 +600,5 @@ $_mealPlanJsonSchema''';
 
   String _getHealthCoachSystemPrompt(String language, String userContext) {
     return "You are a professional nutrition coach in ${_languageNameForModel(language)}. Context: $userContext. Provide empathetic, scientifically-grounded advice.";
-  }
-
-  /// Compress image bytes to reduce payload size for API calls.
-  /// Progressively reduces JPEG quality until file is under 1MB.
-  Future<List<int>> _compressImageBytes(File imageFile) async {
-    try {
-      final originalBytes = await imageFile.readAsBytes();
-      final originalSize = originalBytes.length;
-      
-      // If already under 1MB, return as-is
-      if (originalSize <= 1024 * 1024) {
-        return originalBytes;
-      }
-
-      // Calculate target quality ratio
-      final ratio = (1024 * 1024) / originalSize;
-      final targetQuality = (ratio * 85).clamp(20, 80).toInt();
-
-      debugPrint('Compressing image: ${(originalSize / 1024).toStringAsFixed(0)}KB -> target quality: $targetQuality%');
-
-      // Re-read with reduced dimensions if very large
-      // For images > 4MB, we resize to max 1280px
-      // For images > 2MB, we resize to max 1600px
-      // Otherwise just reduce quality
-      return originalBytes; // Fallback: return original if compression fails
-    } catch (e) {
-      debugPrint('Image compression failed: $e');
-      return await imageFile.readAsBytes();
-    }
   }
 }
