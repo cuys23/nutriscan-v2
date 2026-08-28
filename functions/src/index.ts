@@ -261,7 +261,7 @@ export const groqChatCompletion = onCall(
 const APPLE_ISSUER_ID = defineSecret("APPLE_ISSUER_ID");
 const APPLE_KEY_ID = defineSecret("APPLE_KEY_ID");
 const APPLE_PRIVATE_KEY = defineSecret("APPLE_PRIVATE_KEY");
-const APPLE_BUNDLE_ID = "com.vin.nutrisnap";
+const APPLE_BUNDLE_ID = "com.vin.nourishshot";
 
 /**
  * NOTE: fill this in with a Google Cloud service-account JSON that has the
@@ -272,6 +272,10 @@ const APPLE_BUNDLE_ID = "com.vin.nutrisnap";
 const GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = defineSecret(
   "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON",
 );
+// Deliberately different from APPLE_BUNDLE_ID. The iOS app ships as
+// com.vin.nourishshot; Android is not shipping yet and its applicationId in
+// android/app/build.gradle.kts is still com.vin.nutrisnap, which is what its
+// google-services.json is registered under. Change both together or neither.
 const ANDROID_PACKAGE_NAME = "com.vin.nutrisnap";
 
 /**
