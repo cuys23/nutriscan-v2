@@ -349,7 +349,12 @@ class AppLocalizations {
       'delete_account_description':
           'This will permanently delete your account and all associated data. This action cannot be undone.',
       'delete_account_confirm_hint': 'Type DELETE to confirm',
+      // Word the user must type to enable the delete button. Localise it
+      // together with delete_account_confirm_hint or the hint stops matching.
+      'delete_account_confirm_word': 'DELETE',
       'delete_account_button': 'Delete My Account',
+      'delete_account_subtitle': 'Permanently remove your account and data',
+      'delete_account_success': 'Your account has been deleted.',
       'delete_account_requires_login':
           'Please sign in again before deleting your account for security verification.',
       'delete_account_failed': 'Account deletion failed. Please try again.',
