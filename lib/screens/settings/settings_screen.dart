@@ -542,7 +542,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return const SizedBox.shrink();
           },
         ),
+        const SizedBox(height: 12),
+        // App Store Review Guideline 5.1.1(v): an app offering account
+        // creation must let the user delete the account from inside the app.
+        Consumer<CloudBackupProvider>(
+          builder: (context, backupProvider, child) {
+            if (!backupProvider.isSignedIn) return const SizedBox.shrink();
+            return SettingsCard(
+              icon: IconlyBold.delete,
+              title: AppLocalizations.getString(
+                'delete_account',
+                currentLanguage,
+              ),
+              subtitle: AppLocalizations.getString(
+                'delete_account_subtitle',
+                currentLanguage,
+              ),
+              color: Colors.red,
+              onTap: () => _showDeleteAccountDialog(currentLanguage),
+            );
+          },
+        ),
       ],
+    );
+  }
+
+  Future<void> _showDeleteAccountDialog(String currentLanguage) async {
+    final deleted = await DeleteAccountDialog.show(context, currentLanguage);
+    if (!deleted || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.getString('delete_account_success', currentLanguage),
+        ),
+      ),
     );
   }
 

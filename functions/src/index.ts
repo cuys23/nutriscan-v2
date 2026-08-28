@@ -250,7 +250,7 @@ const APPLE_BUNDLE_ID = "com.vin.nutrisnap";
 const GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = defineSecret(
   "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON",
 );
-const ANDROID_PACKAGE_NAME = "com.nutriscan.app";
+const ANDROID_PACKAGE_NAME = "com.vin.nutrisnap";
 
 interface VerifyPurchaseRequest {
   platform: "ios" | "android";

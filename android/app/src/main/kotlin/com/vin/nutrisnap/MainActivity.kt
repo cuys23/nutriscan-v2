@@ -1,4 +1,4 @@
-package com.example.nutriscan
+package com.vin.nutrisnap
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

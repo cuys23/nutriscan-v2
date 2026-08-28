@@ -26,5 +26,6 @@ export '../../widgets/food/nutrition_summary_card.dart';
 export '../../widgets/home/image_source_button.dart';
 export '../../widgets/policy/policy_header.dart';
 export '../../widgets/policy/policy_section.dart';
+export '../../widgets/settings/delete_account_dialog.dart';
 export '../../widgets/settings/notification_widgets.dart';
 export '../../widgets/settings/settings_card.dart';

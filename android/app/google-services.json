@@ -34,7 +34,7 @@
               "client_id": "1088441843381-6qj8lb9qdqta7eu0snfhqlrcohp4mq1a.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.nutriscan.app"
+                "bundle_id": "com.vin.nutrisnap"
               }
             }
           ]
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1088441843381:android:f50f0a9dc5fb125474c8fc",
         "android_client_info": {
-          "package_name": "com.nutriscan.app"
+          "package_name": "com.vin.nutrisnap"
         }
       },
       "oauth_client": [
@@ -53,7 +53,7 @@
           "client_id": "1088441843381-50jrunv1727ld6tndsp1p4dd3abpk3s5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.nutriscan.app",
+            "package_name": "com.vin.nutrisnap",
             "certificate_hash": "215bdab0e288bad153b0825e7f2225c8bc3c803c"
           }
         },
@@ -78,7 +78,7 @@
               "client_id": "1088441843381-6qj8lb9qdqta7eu0snfhqlrcohp4mq1a.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.nutriscan.app"
+                "bundle_id": "com.vin.nutrisnap"
               }
             }
           ]
