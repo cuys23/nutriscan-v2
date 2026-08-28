@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nutriscan/config/firebase_config.dart';
 import 'package:nutriscan/models/food.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class CloudBackupService {
   static final CloudBackupService _instance = CloudBackupService._internal();
@@ -66,6 +68,37 @@ class CloudBackupService {
           userCredential.user != null && _isSignedIn && _userId != null;
       return isSuccess;
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> signInWithApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode,
+      );
+
+      final userCredential = await _auth.signInWithCredential(oauthCredential);
+      await _updateAuthState();
+
+      final isSuccess =
+          userCredential.user != null && _isSignedIn && _userId != null;
+      return isSuccess;
+    } catch (e) {
+      if (e is SignInWithAppleAuthorizationException &&
+          e.code == AuthorizationErrorCode.canceled) {
+        debugPrint('User canceled Apple Sign In or Apple ID not signed in on device.');
+        return false;
+      }
+      debugPrint('SignInWithApple Error: $e');
       return false;
     }
   }
@@ -184,8 +217,9 @@ class CloudBackupService {
       if (!doc.exists) return null;
 
       final data = doc.data()!;
+      final rawDate = data['backupDate'];
       return {
-        'backupDate': data['backupDate'],
+        'backupDate': rawDate is Timestamp ? rawDate.toDate() : null,
         'totalItems': data['totalItems'] ?? 0,
         'deviceId': data['deviceId'],
       };

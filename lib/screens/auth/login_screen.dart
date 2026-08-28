@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const LoginDescriptionText(),
               const SizedBox(height: 60),
 
-              // Sign In Button
+              // Sign In with Google
               Consumer<CloudBackupProvider>(
                 builder: (_, backupProvider, _ ) {
                   return Container(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               }
                             },
-                      icon: backupProvider.isLoading
+                      icon: backupProvider.isGoogleLoading
                           ? const SizedBox(
                               width: 20,
                               height: 20,
@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 26,
                             ),
                       label: Text(
-                        backupProvider.isLoading
+                        backupProvider.isGoogleLoading
                             ? AppLocalizations.getString(
                                 'signing_in',
                                 currentLanguage,
@@ -167,6 +167,111 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 14),
+
+              // Sign In with Apple
+              Consumer<CloudBackupProvider>(
+                builder: (_, backupProvider, _) {
+                  return Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: isDarkMode ? Colors.white : Colors.black,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (isDarkMode ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: backupProvider.isLoading
+                          ? null
+                          : () async {
+                              final success = await backupProvider
+                                  .signInWithApple(language: currentLanguage);
+
+                              if (success && mounted) {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setBool('has_logged_in', true);
+
+                                await Future.delayed(
+                                  const Duration(milliseconds: 500),
+                                );
+
+                                if (!context.mounted) return;
+                                final isStillSignedIn =
+                                    backupProvider.isSignedIn;
+
+                                if (isStillSignedIn) {
+                                  Navigator.of(context).pushReplacementNamed(
+                                    '/main',
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        AppLocalizations.getString(
+                                          'login_failed',
+                                          currentLanguage,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                              // Apple: don't show error on cancel — user just
+                              // dismissed the sheet, same as v1 behavior.
+                            },
+                      icon: backupProvider.isAppleLoading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  isDarkMode ? Colors.black : Colors.white,
+                                ),
+                              ),
+                            )
+                          : Icon(
+                              Icons.apple,
+                              color: isDarkMode ? Colors.black : Colors.white,
+                              size: 26,
+                            ),
+                      label: Text(
+                        backupProvider.isAppleLoading
+                            ? AppLocalizations.getString(
+                                'signing_in',
+                                currentLanguage,
+                              )
+                            : AppLocalizations.getString(
+                                'sign_in_with_apple',
+                                currentLanguage,
+                              ),
+                        style: themeProvider.getFontForCurrentLanguage(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: isDarkMode ? Colors.black : Colors.white,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(

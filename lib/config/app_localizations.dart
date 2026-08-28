@@ -337,11 +337,24 @@ class AppLocalizations {
       'login_description':
           'Sign in with your Google account to enable cloud backup and sync your data across all devices.',
       'sign_in_with_google': 'Sign in with Google',
+      'sign_in_with_apple': 'Sign in with Apple',
       'signing_in': 'Signing in...',
       'skip_for_now': 'Skip for now',
       'login_failed': 'Login failed. Please try again.',
       'google': 'Google',
       'nutriscan': 'NutriScan',
+
+      // Account Deletion
+      'delete_account': 'Delete Account',
+      'delete_account_description':
+          'This will permanently delete your account and all associated data. This action cannot be undone.',
+      'delete_account_confirm_hint': 'Type DELETE to confirm',
+      'delete_account_button': 'Delete My Account',
+      'delete_account_requires_login':
+          'Please sign in again before deleting your account for security verification.',
+      'delete_account_failed': 'Account deletion failed. Please try again.',
+      'delete_account_purchase_note':
+          'Your subscription will not be automatically cancelled. Please cancel it in your device settings before deleting your account.',
 
       // Cloud Backup Screen
       'cloud_backup': 'Cloud Backup',
