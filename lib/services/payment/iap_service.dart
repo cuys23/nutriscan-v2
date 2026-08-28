@@ -23,11 +23,11 @@ class IAPService {
 
   bool _available = false;
   List<ProductDetails> _products = [];
-  Function(PurchaseDetails)? _onPurchaseSuccess;
+  Future<void> Function(PurchaseDetails)? _onPurchaseSuccess;
   Function(String)? _onPurchaseError;
 
   void initialize({
-    required Function(PurchaseDetails) onPurchaseSuccess,
+    required Future<void> Function(PurchaseDetails) onPurchaseSuccess,
     required Function(String) onPurchaseError,
   }) {
     _onPurchaseSuccess = onPurchaseSuccess;
@@ -89,7 +89,7 @@ class IAPService {
     return await _iap.buyNonConsumable(purchaseParam: purchaseParam);
   }
 
-  void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
+  Future<void> _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) async {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
         // Handle pending
@@ -97,12 +97,22 @@ class IAPService {
         _onPurchaseError?.call(purchaseDetails.error?.message ?? 'Purchase failed');
       } else if (purchaseDetails.status == PurchaseStatus.purchased ||
                  purchaseDetails.status == PurchaseStatus.restored) {
-        
-        // Verify purchase if needed, then complete
-        _onPurchaseSuccess?.call(purchaseDetails);
-        
+        // Await server-side verification before acknowledging. Completing
+        // first would consume the transaction while verification is still in
+        // flight — if the app dies mid-verify the store never redelivers it
+        // and the user has paid for nothing until they hit Restore.
+        try {
+          await _onPurchaseSuccess?.call(purchaseDetails);
+        } catch (e) {
+          debugPrint('Purchase handler threw: $e');
+        }
+
+        // Complete even when verification failed: an unacknowledged
+        // transaction hangs on Android and auto-refunds on iOS after three
+        // days. Premium is granted by Firestore, not by this call, so
+        // completing an unverified purchase grants nothing.
         if (purchaseDetails.pendingCompletePurchase) {
-          _iap.completePurchase(purchaseDetails);
+          await _iap.completePurchase(purchaseDetails);
         }
       }
     }

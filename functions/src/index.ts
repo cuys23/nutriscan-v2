@@ -262,6 +262,22 @@ const GOOGLE_PLAY_SERVICE_ACCOUNT_JSON = defineSecret(
 );
 const ANDROID_PACKAGE_NAME = "com.nutriscan.app";
 
+/**
+ * Skips real App Store / Play receipt verification and trusts the
+ * client-reported purchase. Only for a staging project that has no
+ * APPLE_ISSUER_ID/KEY_ID/PRIVATE_KEY or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON yet.
+ *
+ * A functions param rather than a code constant so production is safe by
+ * default: leaving it alone verifies for real, and turning it on takes a
+ * deliberate per-project override that is visible in the deploy config —
+ * whereas a hardcoded `true` ships to production the moment someone forgets
+ * to flip it back.
+ *
+ *   firebase functions:config unset / set via .env.<project>:
+ *     IAP_TEST_MODE=true
+ */
+const IAP_TEST_MODE = defineString("IAP_TEST_MODE", { default: "false" });
+
 interface VerifyPurchaseRequest {
   platform: "ios" | "android";
   productId: string;
@@ -389,13 +405,15 @@ export const verifyPurchase = onCall(
     const { platform, productId, verificationData } = request.data;
     const uid = request.auth.uid;
 
-    // ponytail: no Apple Developer / Play Console account yet, so the real
-    // App Store/Play server verification below can't authenticate. Trusts the
-    // client-reported purchase instead. Flip IAP_TEST_MODE to false once real
-    // APPLE_ISSUER_ID/KEY_ID/PRIVATE_KEY or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON
-    // are set from a real account, and redeploy.
-    const IAP_TEST_MODE = true;
-    const result = IAP_TEST_MODE
+    const testMode = IAP_TEST_MODE.value() === "true";
+    if (testMode) {
+      logger.warn("IAP_TEST_MODE is on — granting premium WITHOUT verifying", {
+        uid,
+        platform,
+        productId,
+      });
+    }
+    const result = testMode
       ? { isActive: true, expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000 }
       : platform === "ios"
         ? await verifyAppleTransaction(verificationData)
