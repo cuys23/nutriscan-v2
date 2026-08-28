@@ -1,0 +1,53 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "nutriscan-75d57",
+          "appId": "1:1088441843381:android:8d6fa73cb4f1b35374c8fc",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "nutriscan-75d57",
+          "appId": "1:1088441843381:ios:ca16cb905ebf649874c8fc",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "nutriscan-75d57",
+          "configurations": {
+            "android": "1:1088441843381:android:8d6fa73cb4f1b35374c8fc",
+            "ios": "1:1088441843381:ios:ca16cb905ebf649874c8fc"
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001,
+      "host": "0.0.0.0"
+    }
+  }
+}

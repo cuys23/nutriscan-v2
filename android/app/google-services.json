@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "1088441843381",
+    "project_id": "nutriscan-75d57",
+    "storage_bucket": "nutriscan-75d57.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088441843381:android:8d6fa73cb4f1b35374c8fc",
+        "android_client_info": {
+          "package_name": "com.cuydev.nutriscan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088441843381-rt1ld7r10vucv57h6p0lpksqmi26uq5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyJZZEkmWI8lndY-ssMdvsZCiXlZ0JvJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088441843381-rt1ld7r10vucv57h6p0lpksqmi26uq5k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1088441843381-6qj8lb9qdqta7eu0snfhqlrcohp4mq1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nutriscan.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088441843381:android:f50f0a9dc5fb125474c8fc",
+        "android_client_info": {
+          "package_name": "com.nutriscan.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088441843381-50jrunv1727ld6tndsp1p4dd3abpk3s5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nutriscan.app",
+            "certificate_hash": "215bdab0e288bad153b0825e7f2225c8bc3c803c"
+          }
+        },
+        {
+          "client_id": "1088441843381-rt1ld7r10vucv57h6p0lpksqmi26uq5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyJZZEkmWI8lndY-ssMdvsZCiXlZ0JvJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088441843381-rt1ld7r10vucv57h6p0lpksqmi26uq5k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1088441843381-6qj8lb9qdqta7eu0snfhqlrcohp4mq1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nutriscan.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

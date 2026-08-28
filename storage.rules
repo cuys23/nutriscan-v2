@@ -1,0 +1,30 @@
+rules_version = '2';
+
+// Firebase Storage security rules for NutriScan.
+//
+// Previously these rules lived only in the Firebase console, which means they
+// were not reviewable, not versioned, and could silently drift from the app.
+// Deploy with: firebase deploy --only storage
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Meal photos uploaded by premium users.
+    // Read/write/delete is scoped to the owning user. Delete permission is
+    // required by the in-app account deletion flow (App Store 5.1.1(v)).
+    match /food_images/{userId}/{allPaths=**} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      allow write: if request.auth != null
+                   && request.auth.uid == userId
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Default deny.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

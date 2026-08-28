@@ -1,0 +1,57 @@
+name: nutriscan
+description: "NutriScan  AI-powered nutrition analysis app that scans food images"
+publish_to: 'none'
+
+version: 2.1.2+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  image_picker: ^1.0.7
+  dio: ^5.4.0
+  provider: ^6.1.1
+  fl_chart: ^1.1.0
+  flutter_svg: ^2.0.10+1
+  permission_handler: ^12.0.1
+  flutter_markdown: ^0.7.3
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  path_provider: ^2.1.4
+  url_launcher: ^6.3.0
+  intl: ^0.20.2
+  connectivity_plus: ^6.1.3
+  google_fonts: ^6.2.1
+  iconly: ^1.0.1
+  flutter_secure_storage: ^9.2.2
+  google_mobile_ads: ^6.0.0
+  in_app_purchase: ^3.2.0
+  firebase_core: ^4.1.1
+  cloud_firestore: ^6.0.2
+  firebase_auth: ^6.1.0
+  firebase_storage: ^13.0.2
+  google_sign_in: ^6.2.1
+  firebase_messaging: ^16.0.2
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/svg/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.jpg"
+  min_sdk_android: 21
+

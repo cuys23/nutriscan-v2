@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection: Restrict users from altering their premium subscription state
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Allow creation only if they don't try to make themselves premium
+      allow create: if request.auth != null && request.auth.uid == userId
+                    && (!request.resource.data.keys().hasAny(['subscription']) 
+                        || request.resource.data.subscription.isSubscribed == false);
+                        
+      // Prevent updating the subscription field entirely to block free premium hacks
+      allow update: if request.auth != null && request.auth.uid == userId
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['subscription']));
+
+      // Account deletion (App Store Guideline 5.1.1(v)). A user must be able to
+      // erase their own profile document. Without this rule the in-app
+      // "Delete Account" flow fails with PERMISSION_DENIED and leaves the
+      // Firestore record orphaned after the Auth user is removed.
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Backups collection: Users can fully manage their own backups
+    match /backups/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Foods collection: Public to read, but only admin can write
+    match /foods/{foodId} {
+      allow read: if request.auth != null;
+      allow write: if false; 
+    }
+    
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
