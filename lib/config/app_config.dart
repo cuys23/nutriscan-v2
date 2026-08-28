@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String appName = 'NutriSnap';
+  static const String appName = 'NourishShot';
   static const String appVersion = '1.0.0';
 
   static const String buildNumber = '1';

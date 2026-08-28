@@ -1,5 +1,5 @@
 {
-  "identifier" : "NutriSnapStoreKit",
+  "identifier" : "NourishShotStoreKit",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -60,15 +60,15 @@
   },
   "subscriptionGroups" : [
     {
-      "id" : "NutriSnapSubscriptions",
+      "id" : "NourishShotSubscriptions",
       "localizations" : [
         {
-          "description" : "NutriSnap Premium Membership",
-          "displayName" : "NutriSnap Premium",
+          "description" : "NourishShot Premium Membership",
+          "displayName" : "NourishShot Premium",
           "locale" : "en_US"
         }
       ],
-      "name" : "NutriSnap Premium",
+      "name" : "NourishShot Premium",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -92,7 +92,7 @@
           "productID" : "com.vin.nourishshot_monthly_pro",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly Pro",
-          "subscriptionGroupID" : "NutriSnapSubscriptions",
+          "subscriptionGroupID" : "NourishShotSubscriptions",
           "type" : "RecurringSubscription"
         },
         {
@@ -117,7 +117,7 @@
           "productID" : "com.vin.nourishshot_yearly_pro",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Yearly Pro",
-          "subscriptionGroupID" : "NutriSnapSubscriptions",
+          "subscriptionGroupID" : "NourishShotSubscriptions",
           "type" : "RecurringSubscription"
         }
       ]

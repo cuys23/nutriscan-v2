@@ -72,7 +72,7 @@ class AdsConfig {
   // PRODUCTION AD UNIT IDs — FILL THESE BEFORE SUBMITTING TO THE STORE
   // ═══════════════════════════════════════════════════════════════════
   //
-  // 1. AdMob console → Apps → NutriSnap (iOS) → Ad units → copy each ID.
+  // 1. AdMob console → Apps → NourishShot (iOS) → Ad units → copy each ID.
   // 2. Paste below. Format: 'ca-app-pub-<16 digits>/<10 digits>'.
   // 3. ALSO update `GADApplicationIdentifier` in ios/Runner/Info.plist — that
   //    is the App ID (with `~`), not an ad unit ID (with `/`).

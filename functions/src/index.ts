@@ -22,8 +22,8 @@ const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1/chat/completions";
 // OpenRouter attributes usage to these two headers on its dashboard/leaderboard.
 // Optional for the API to work, but without them every call shows up as
 // "unknown app", which makes per-app spend impossible to read.
-const OPENROUTER_REFERER = "https://nutrisnap.app";
-const OPENROUTER_TITLE = "NutriSnap";
+const OPENROUTER_REFERER = "https://nourishshot.app";
+const OPENROUTER_TITLE = "NourishShot";
 
 // Fraction of successful matchFood calls sampled into `validation_logs` for
 // offline drift monitoring (docs/plan.md Phase 3C). Override per-environment

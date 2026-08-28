@@ -1,5 +1,5 @@
 /**
- * Maps USDA FoodData Central nutrient numbers to canonical NutriScan keys.
+ * Maps USDA FoodData Central nutrient numbers to canonical NourishShot keys.
  *
  * USDA nutrient numbers (docs/MASTER_PLAN.md §7.2):
  *   1008 → calories_kcal

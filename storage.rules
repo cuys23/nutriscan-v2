@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Firebase Storage security rules for NutriScan.
+// Firebase Storage security rules for NourishShot.
 //
 // Previously these rules lived only in the Firebase console, which means they
 // were not reviewable, not versioned, and could silently drift from the app.

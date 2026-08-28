@@ -21,14 +21,13 @@ class LoginWelcomeText extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text:
-                AppLocalizations.getString(
-                  'welcome_to_nutriscan',
-                  currentLanguage,
-                ).replaceAll(
-                  'NutriScan',
-                  AppLocalizations.getString('nutriscan', currentLanguage),
-                ),
+            // The brand name is the same in every locale now, so the old
+            // replaceAll that swapped it for a per-locale spelling would only
+            // substitute 'NourishShot' for 'NourishShot'.
+            text: AppLocalizations.getString(
+              'welcome_to_nutriscan',
+              currentLanguage,
+            ),
           ),
         ],
       ),
