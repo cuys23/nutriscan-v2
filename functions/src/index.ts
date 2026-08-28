@@ -160,9 +160,21 @@ export const groqChatCompletion = onCall(
 
     await enforceDailyRateLimit(request.auth.uid);
 
-    const { receiveTimeoutMs, ...aiBody } = request.data;
+    const { receiveTimeoutMs, ...clientBody } = request.data;
     const timeoutMs = receiveTimeoutMs ?? 30_000;
     const apiKey = OPENROUTER_API_KEY.value();
+
+    // Every Qwen model the app can be pointed at is a reasoning ("thinking")
+    // model, and left alone they spend the entire max_tokens budget on hidden
+    // reasoning and return an EMPTY content string. Measured against
+    // openrouter.ai: qwen3.7-flash burned 256/256 tokens on the food-validation
+    // call (max_tokens 256) and 1024/1024 when given more room — content empty
+    // both times, finish_reason "length". With reasoning off the same call
+    // answers in 16 tokens.
+    //
+    // Injected here rather than in the client so it also covers builds already
+    // in the field, and spread first so a caller can still opt back in.
+    const aiBody = { reasoning: { enabled: false }, ...clientBody };
 
     const startTime = Date.now();
     try {

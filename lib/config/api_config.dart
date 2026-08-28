@@ -7,10 +7,13 @@ class ApiConfig {
   /// Model id used for every AI call — vision (food validation, food
   /// analysis) and text (meal plan, insights, health coach) alike.
   ///
-  /// Must be a vision-capable model: the scan path sends `image_url` content
-  /// parts, which a text-only model rejects. `qwen/qwen3-8b` is text-only on
-  /// OpenRouter and would break every scan.
-  static const String groqModel = 'qwen/qwen3.8-flash';
+  /// Two things this model has to be, both verified against openrouter.ai:
+  ///  - vision-capable, because the scan path sends `image_url` content parts
+  ///    (`qwen/qwen3-8b` is text-only there and rejects every scan);
+  ///  - answering with reasoning switched off, which the Cloud Function forces
+  ///    for every request — otherwise a thinking model spends the whole
+  ///    max_tokens budget reasoning and returns empty content.
+  static const String groqModel = 'qwen/qwen3.7-flash';
 
   // Bump whenever the food-analysis prompt changes materially.
   static const String scanPromptVersion = 'scan_v2';
