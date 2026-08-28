@@ -15,9 +15,15 @@ import { maybeLogValidationSample } from "./fkb/validationLog";
 initializeApp();
 const db = getFirestore();
 
-const GROQ_API_KEY = defineSecret("GROQ_API_KEY");
+const OPENROUTER_API_KEY = defineSecret("OPENROUTER_API_KEY");
 const USDA_FDC_API_KEY = defineSecret("USDA_FDC_API_KEY");
-const GROQ_BASE_URL = "https://api.groq.com/openai/v1/chat/completions";
+const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+// OpenRouter attributes usage to these two headers on its dashboard/leaderboard.
+// Optional for the API to work, but without them every call shows up as
+// "unknown app", which makes per-app spend impossible to read.
+const OPENROUTER_REFERER = "https://nutrisnap.app";
+const OPENROUTER_TITLE = "NutriSnap";
 
 // Fraction of successful matchFood calls sampled into `validation_logs` for
 // offline drift monitoring (docs/plan.md Phase 3C). Override per-environment
@@ -27,7 +33,7 @@ const VALIDATION_SAMPLE_RATE = defineString("VALIDATION_SAMPLE_RATE", {
 });
 
 // Real backstop for AI-call abuse — the client's "coin" balance is only a UX gate,
-// this is what actually stops someone from running unlimited billed Groq requests.
+// this is what actually stops someone from running unlimited billed AI requests.
 const DAILY_GROQ_CALL_LIMIT = 100;
 
 /**
@@ -54,7 +60,7 @@ async function enforceDailyRateLimit(uid: string): Promise<void> {
   });
 }
 
-interface GroqChatCompletionRequest {
+interface ChatCompletionRequest {
   model: string;
   messages: unknown[];
   temperature?: number;
@@ -63,23 +69,21 @@ interface GroqChatCompletionRequest {
   receiveTimeoutMs?: number;
 }
 
-function isValidGroqRequest(data: unknown): data is GroqChatCompletionRequest {
+function isValidChatRequest(data: unknown): data is ChatCompletionRequest {
   if (typeof data !== "object" || data === null) return false;
   const d = data as Record<string, unknown>;
   return typeof d.model === "string" && Array.isArray(d.messages);
 }
 
-// Groq's TPM (tokens-per-minute) 429s regularly ask for 20-35s before the
-// client's own fixed 3s retry (groq_service.dart _callGroq) ever had a
-// chance of succeeding — confirmed in production logs: two consecutive
-// scan attempts both 429'd within ~4s of each other because our retry
-// fired well before Groq's actual cooldown, and the scan just failed
-// silently with nothing shown to the user. Parse Groq's own suggested
-// delay and wait that long server-side instead of guessing.
+// Rate-limit 429s regularly ask for 20-35s of cooldown, far longer than any
+// fixed client-side retry would wait — a blind 3s retry just burns a second
+// billed request and the scan still fails silently. Honour the provider's own
+// suggested delay server-side instead of guessing: `Retry-After` when present,
+// otherwise the "try again in Ns" phrasing some upstreams put in the message.
 const RETRY_AFTER_MESSAGE_RE = /try again in ([\d.]+)\s*s/i;
 const MAX_RETRY_AFTER_MS = 40_000;
 
-function retryAfterMsFromGroqError(
+function retryAfterMsFromError(
   response: Response,
   json: unknown,
 ): number | null {
@@ -96,8 +100,8 @@ function retryAfterMsFromGroqError(
     if (match) {
       const seconds = Number(match[1]);
       if (Number.isFinite(seconds) && seconds > 0) {
-        // A little padding — Groq's own countdown is to the millisecond and
-        // retrying at exactly t=0 still occasionally 429s again.
+        // A little padding — the countdown is to the millisecond and retrying
+        // at exactly t=0 still occasionally 429s again.
         return Math.min((seconds + 1) * 1000, MAX_RETRY_AFTER_MS);
       }
     }
@@ -105,21 +109,23 @@ function retryAfterMsFromGroqError(
   return null;
 }
 
-async function fetchGroq(
-  groqBody: Record<string, unknown>,
+async function fetchOpenRouter(
+  body: Record<string, unknown>,
   apiKey: string,
   receiveTimeoutMs: number,
 ): Promise<{ response: Response; json: Record<string, unknown> }> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), receiveTimeoutMs);
   try {
-    const response = await fetch(GROQ_BASE_URL, {
+    const response = await fetch(OPENROUTER_BASE_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
+        "HTTP-Referer": OPENROUTER_REFERER,
+        "X-Title": OPENROUTER_TITLE,
       },
-      body: JSON.stringify(groqBody),
+      body: JSON.stringify(body),
       signal: controller.signal,
     });
     const json = (await response.json()) as Record<string, unknown>;
@@ -130,67 +136,71 @@ async function fetchGroq(
 }
 
 /**
- * Callable proxy for all Groq chat-completion calls made by the app
- * (food analysis, meal plans, insights, health coach chat).
+ * Callable proxy for every AI chat-completion the app makes (food image
+ * validation, food analysis, meal plans, insights, health coach chat).
  *
- * Keeps the real Groq API key out of the client entirely and enforces a
- * real per-user daily cap — the mobile app no longer talks to api.groq.com
- * directly. Client passes through the same request body it used to send
- * straight to Groq; this function just forwards it with the real key attached.
+ * Keeps the real OpenRouter API key out of the client entirely and enforces a
+ * per-user daily cap — the mobile app never talks to openrouter.ai directly.
+ * The client sends the same OpenAI-shaped chat-completions body it would have
+ * sent upstream; this function forwards it with the real key attached.
+ *
+ * Name kept as `groqChatCompletion` (rather than renamed to match the new
+ * provider) because it is the deployed callable name the shipped client calls;
+ * renaming it would break every build already in the field.
  */
 export const groqChatCompletion = onCall(
-  { secrets: [GROQ_API_KEY], timeoutSeconds: 120, memory: "256MiB" },
+  { secrets: [OPENROUTER_API_KEY], timeoutSeconds: 120, memory: "256MiB" },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError("unauthenticated", "Sign-in required.");
     }
-    if (!isValidGroqRequest(request.data)) {
-      throw new HttpsError("invalid-argument", "Malformed Groq request body.");
+    if (!isValidChatRequest(request.data)) {
+      throw new HttpsError("invalid-argument", "Malformed AI request body.");
     }
 
     await enforceDailyRateLimit(request.auth.uid);
 
-    const { receiveTimeoutMs, ...groqBody } = request.data;
+    const { receiveTimeoutMs, ...aiBody } = request.data;
     const timeoutMs = receiveTimeoutMs ?? 30_000;
-    const apiKey = GROQ_API_KEY.value();
+    const apiKey = OPENROUTER_API_KEY.value();
 
     const startTime = Date.now();
     try {
-      let { response, json } = await fetchGroq(groqBody, apiKey, timeoutMs);
+      let { response, json } = await fetchOpenRouter(aiBody, apiKey, timeoutMs);
 
       if (!response.ok && response.status === 429) {
-        const retryAfterMs = retryAfterMsFromGroqError(response, json);
-        logger.warn("Groq API 429, retrying once", {
+        const retryAfterMs = retryAfterMsFromError(response, json);
+        logger.warn("OpenRouter 429, retrying once", {
           uid: request.auth.uid,
-          model: groqBody.model,
+          model: aiBody.model,
           retryAfterMs,
           json,
         });
         if (retryAfterMs != null) {
           await new Promise((resolve) => setTimeout(resolve, retryAfterMs));
-          ({ response, json } = await fetchGroq(groqBody, apiKey, timeoutMs));
+          ({ response, json } = await fetchOpenRouter(aiBody, apiKey, timeoutMs));
         }
       }
 
       const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
-        logger.warn("Groq API error", {
+        logger.warn("OpenRouter error", {
           uid: request.auth.uid,
-          model: groqBody.model,
+          model: aiBody.model,
           latencyMs,
           status: response.status,
           json,
         });
         throw new HttpsError(
           response.status === 429 ? "resource-exhausted" : "internal",
-          `Groq API request failed with status ${response.status}`,
+          `AI request failed with status ${response.status}`,
         );
       }
 
-      logger.info("Groq API success", {
+      logger.info("OpenRouter success", {
         uid: request.auth.uid,
-        model: groqBody.model,
+        model: aiBody.model,
         latencyMs,
         usage: json.usage,
       });
@@ -199,9 +209,9 @@ export const groqChatCompletion = onCall(
     } catch (err) {
       const latencyMs = Date.now() - startTime;
       if (err instanceof HttpsError) {
-        logger.warn("Groq request failed with HttpsError", {
+        logger.warn("AI request failed with HttpsError", {
           uid: request.auth.uid,
-          model: groqBody.model,
+          model: aiBody.model,
           latencyMs,
           code: err.code,
           message: err.message,
@@ -209,16 +219,16 @@ export const groqChatCompletion = onCall(
         throw err;
       }
       if ((err as Error).name === "AbortError") {
-        logger.error("Groq request timeout", {
+        logger.error("AI request timeout", {
           uid: request.auth.uid,
-          model: groqBody.model,
+          model: aiBody.model,
           latencyMs,
         });
-        throw new HttpsError("deadline-exceeded", "Groq request timed out.");
+        throw new HttpsError("deadline-exceeded", "AI request timed out.");
       }
-      logger.error("Unexpected error calling Groq", {
+      logger.error("Unexpected error calling OpenRouter", {
         uid: request.auth.uid,
-        model: groqBody.model,
+        model: aiBody.model,
         latencyMs,
         error: String(err),
       });

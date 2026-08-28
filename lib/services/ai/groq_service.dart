@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nutriscan/config/api_config.dart';
@@ -9,26 +9,48 @@ import 'package:nutriscan/models/chat_message.dart';
 import 'package:nutriscan/models/meal_plan.dart';
 
 class GroqService {
-  static String get _baseUrl => ApiConfig.groqBaseUrl;
-  static String get _apiKey => ApiConfig.groqApiKey;
   static String get _model => ApiConfig.groqModel;
 
-  late final Dio _dio;
+  /// Every AI call goes through this Cloud Function instead of hitting
+  /// openrouter.ai directly — the API key stays server-side and the function
+  /// enforces sign-in plus a real per-user daily cap (functions/src/index.ts).
+  /// The callable keeps its original name so already-deployed builds keep
+  /// working; only the provider behind it changed.
+  final HttpsCallable _aiCallable = FirebaseFunctions.instance.httpsCallable(
+    'groqChatCompletion',
+    options: HttpsCallableOptions(timeout: const Duration(seconds: 120)),
+  );
 
-  GroqService() {
-    _dio = Dio();
-    _dio.options.connectTimeout = const Duration(seconds: 30);
-    _dio.options.receiveTimeout = const Duration(seconds: 30);
-    _dio.options.sendTimeout = const Duration(seconds: 30);
+  /// Forwards an OpenAI-shaped chat-completions body and returns the raw
+  /// response JSON, same shape the client used to get straight from the
+  /// provider — so the parsing below is unchanged.
+  Future<Map<String, dynamic>> _callAi(Map<String, dynamic> requestBody) async {
+    final result = await _aiCallable.call<Map<String, dynamic>>(requestBody);
+    return Map<String, dynamic>.from(result.data);
+  }
 
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onError: (error, handler) {
-          debugPrint('GroqService API Error: ${error.message}');
-          handler.next(error);
-        },
-      ),
-    );
+  /// Maps a callable failure onto the same localized copy the Dio error
+  /// handling used to produce, so callers and the UI see no difference.
+  String _messageForCallableError(
+    FirebaseFunctionsException e,
+    String language,
+  ) {
+    switch (e.code) {
+      case 'unauthenticated':
+        return getLocalizedErrorMessage('login_required', language);
+      case 'resource-exhausted':
+        return getLocalizedErrorMessage('rate_limit', language);
+      case 'deadline-exceeded':
+        return getLocalizedErrorMessage('response_timeout', language);
+      case 'unavailable':
+        return getLocalizedErrorMessage('connection_failed', language);
+      case 'invalid-argument':
+        return getLocalizedErrorMessage('invalid_request', language);
+      default:
+        return getLocalizedErrorMessage('server_error', language, {
+          'status': e.code,
+        });
+    }
   }
 
   static String _mimeTypeFromFile(File file) {
@@ -126,21 +148,9 @@ class GroqService {
         "max_tokens": 256,
       };
 
-      final response = await _dio.post(
-        _baseUrl,
-        data: requestBody,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'NutriScan/2.1.2',
-            'Authorization': 'Bearer $_apiKey',
-          },
-        ),
-      );
+      final data = await _callAi(requestBody);
 
-      if (response.statusCode != 200) return _fallbackAllow(imageFile);
-
-      String content = _extractContentFromResponse(response.data);
+      String content = _extractContentFromResponse(data);
       if (content.isEmpty) return true;
 
       content = content
@@ -197,6 +207,15 @@ class GroqService {
       }
 
       return false;
+    } on FirebaseFunctionsException catch (e) {
+      // Not-signed-in and out-of-quota are hard stops: letting the permissive
+      // fallback wave the image through only makes analyzeFoodImage fail a
+      // second time, and the user never sees why. Surface the real reason.
+      debugPrint('groqChatCompletion error in isFoodImage: ${e.code}');
+      if (e.code == 'unauthenticated' || e.code == 'resource-exhausted') {
+        throw Exception(_messageForCallableError(e, language));
+      }
+      return _fallbackFoodDetection(imageFile);
     } catch (e) {
       debugPrint('Error in isFoodImage: $e');
       try {
@@ -205,15 +224,6 @@ class GroqService {
         debugPrint('Fallback food detection failed: $inner');
         return true;
       }
-    }
-  }
-
-  Future<bool> _fallbackAllow(File imageFile) async {
-    try {
-      return await _fallbackFoodDetection(imageFile);
-    } catch (e) {
-      debugPrint('Fallback allow failed: $e');
-      return true;
     }
   }
 
@@ -244,17 +254,14 @@ class GroqService {
     String language = 'en',
   }) async {
     try {
-      // Validate API key before making request
-      if (!ApiConfig.isApiKeyConfigured) {
-        throw Exception(getLocalizedErrorMessage('invalid_api_key', language));
-      }
-
       if (!await _checkNetworkConnectivity()) {
         throw Exception(getLocalizedErrorMessage('no_internet', language));
       }
 
-      // Compress image if larger than 1MB to reduce API payload
-      var imageBytes = await imageFile.readAsBytes();
+      // Compress image if larger than 1MB to reduce API payload.
+      // ponytail: _compressImageBytes is still a stub that returns the
+      // original bytes — real resize/encode lands with ImagePrepare.
+      List<int> imageBytes = await imageFile.readAsBytes();
       if (imageBytes.length > 1024 * 1024) {
         imageBytes = await _compressImageBytes(imageFile);
       }
@@ -281,76 +288,22 @@ class GroqService {
         "max_tokens": 2048,
       };
 
-      final response = await _dio.post(
-        _baseUrl,
-        data: requestBody,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'NutriScan/2.1.2',
-            'Authorization': 'Bearer $_apiKey',
-          },
-        ),
-      );
+      final data = await _callAi(requestBody);
 
-      if (response.statusCode == 200) {
-        final content = _extractContentFromResponse(response.data);
-        if (content.isEmpty) {
-          throw Exception(getLocalizedErrorMessage('parse_error', language));
-        }
-        final jsonStart = content.indexOf('{');
-        final jsonEnd = content.lastIndexOf('}') + 1;
-        if (jsonStart != -1 && jsonEnd > jsonStart) {
-          final jsonString = content.substring(jsonStart, jsonEnd);
-          final Map<String, dynamic> result =
-              json.decode(jsonString) as Map<String, dynamic>;
-          return result;
-        }
+      final content = _extractContentFromResponse(data);
+      if (content.isEmpty) {
         throw Exception(getLocalizedErrorMessage('parse_error', language));
-      } else {
-        throw Exception(
-          getLocalizedErrorMessage('api_failed', language, {
-            'status': response.statusCode.toString(),
-          }),
-        );
       }
-    } on DioException catch (e) {
-      debugPrint('Dio error in analyzeFoodImage: ${e.message}');
-      String errorMessage = getLocalizedErrorMessage('network_error', language);
-
-      switch (e.type) {
-        case DioExceptionType.connectionTimeout:
-          errorMessage = getLocalizedErrorMessage('connection_timeout', language);
-          break;
-        case DioExceptionType.receiveTimeout:
-          errorMessage = getLocalizedErrorMessage('response_timeout', language);
-          break;
-        case DioExceptionType.connectionError:
-          errorMessage = getLocalizedErrorMessage('connection_failed', language);
-          break;
-        case DioExceptionType.badResponse:
-          if (e.response?.statusCode == 400) {
-            errorMessage = getLocalizedErrorMessage('invalid_request', language);
-          } else if (e.response?.statusCode == 401) {
-            errorMessage = getLocalizedErrorMessage('invalid_api_key', language);
-          } else if (e.response?.statusCode == 403) {
-            errorMessage = getLocalizedErrorMessage('access_denied', language);
-          } else if (e.response?.statusCode == 429) {
-            errorMessage = getLocalizedErrorMessage('rate_limit', language);
-          } else {
-            errorMessage = getLocalizedErrorMessage('server_error', language, {
-              'status': e.response?.statusCode.toString() ?? 'unknown',
-            });
-          }
-          break;
-        default:
-          errorMessage = getLocalizedErrorMessage(
-            'network_error_generic',
-            language,
-            {'message': e.message ?? 'unknown'},
-          );
+      final jsonStart = content.indexOf('{');
+      final jsonEnd = content.lastIndexOf('}') + 1;
+      if (jsonStart == -1 || jsonEnd <= jsonStart) {
+        throw Exception(getLocalizedErrorMessage('parse_error', language));
       }
-      throw Exception(errorMessage);
+      return json.decode(content.substring(jsonStart, jsonEnd))
+          as Map<String, dynamic>;
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('groqChatCompletion error in analyzeFoodImage: ${e.code}');
+      throw Exception(_messageForCallableError(e, language));
     } catch (e) {
       debugPrint('General error in analyzeFoodImage: $e');
       rethrow;
@@ -365,6 +318,7 @@ class GroqService {
     Map<String, Map<String, String>> errorMessages = {
       'en': {
         'no_internet': 'No internet connection. Please check your network and try again.',
+        'login_required': 'Please sign in to use AI features.',
         'parse_error': 'Could not parse JSON response from AI',
         'api_failed': 'API request failed with status: {status}',
         'network_error': 'Network error occurred',
@@ -380,6 +334,7 @@ class GroqService {
       },
       'bn': {
         'no_internet': 'ইন্টারনেট সংযোগ নেই। অনুগ্রহ করে আপনার নেটওয়ার্ক পরীক্ষা করুন এবং আবার চেষ্টা করুন।',
+        'login_required': 'AI ফিচার ব্যবহার করতে অনুগ্রহ করে সাইন ইন করুন।',
         'parse_error': 'AI থেকে JSON প্রতিক্রিয়া পার্স করতে পারেনি',
         'api_failed': 'API অনুরোধ ব্যর্থ হয়েছে স্ট্যাটাস: {status}',
         'network_error': 'নেটওয়ার্ক ত্রুটি ঘটেছে',
@@ -534,41 +489,35 @@ Rules:
       );
 
       final requestBody = {
-        "model": "llama-3.1-70b-versatile",
+        // Was hardcoded to a Groq-only llama id, which no longer resolves on
+        // OpenRouter — all paths now use the single configured model.
+        "model": _model,
         "messages": [
           {"role": "user", "content": prompt},
         ],
         "temperature": 0.45,
         "top_p": 0.95,
         "max_tokens": 8192,
+        // Honoured by the Cloud Function's fetch abort, replacing the Dio
+        // per-request receiveTimeout this call used to set.
+        "receiveTimeoutMs": 90000,
       };
 
-      final response = await _dio.post(
-        _baseUrl,
-        data: requestBody,
-        options: Options(
-          receiveTimeout: const Duration(seconds: 90),
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'NutriScan/2.1.2',
-            'Authorization': 'Bearer $_apiKey',
-          },
-        ),
-      );
+      final data = await _callAi(requestBody);
 
-      if (response.statusCode == 200) {
-        String content = _extractContentFromResponse(response.data);
-        if (content.isEmpty) throw Exception(getLocalizedErrorMessage('parse_error', language));
-        content = content.replaceAll(RegExp(r'^```(?:json)?\s*'), '').replaceAll(RegExp(r'\s*```\s*$'), '').trim();
-        final jsonStart = content.indexOf('{');
-        if (jsonStart == -1) throw Exception(getLocalizedErrorMessage('parse_error', language));
-        final jsonEnd = _findMatchingBraceEnd(content, jsonStart);
-        if (jsonEnd == null) throw Exception(getLocalizedErrorMessage('parse_error', language));
-        final jsonString = content.substring(jsonStart, jsonEnd);
-        final Map<String, dynamic> result = json.decode(jsonString) as Map<String, dynamic>;
-        return MealPlan.fromMap(result);
-      }
-      throw Exception("Failed to generate plan");
+      String content = _extractContentFromResponse(data);
+      if (content.isEmpty) throw Exception(getLocalizedErrorMessage('parse_error', language));
+      content = content.replaceAll(RegExp(r'^```(?:json)?\s*'), '').replaceAll(RegExp(r'\s*```\s*$'), '').trim();
+      final jsonStart = content.indexOf('{');
+      if (jsonStart == -1) throw Exception(getLocalizedErrorMessage('parse_error', language));
+      final jsonEnd = _findMatchingBraceEnd(content, jsonStart);
+      if (jsonEnd == null) throw Exception(getLocalizedErrorMessage('parse_error', language));
+      final jsonString = content.substring(jsonStart, jsonEnd);
+      final Map<String, dynamic> result = json.decode(jsonString) as Map<String, dynamic>;
+      return MealPlan.fromMap(result);
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('groqChatCompletion error in generateMealPlan: ${e.code}');
+      throw Exception(_messageForCallableError(e, language));
     } catch (e) {
       debugPrint('Error in generateMealPlan: $e');
       rethrow;
@@ -588,19 +537,17 @@ Rules:
         "temperature": 0.3, "top_p": 1, "max_tokens": 2048,
       };
 
-      final response = await _dio.post(_baseUrl, data: requestBody, options: Options(headers: {
-        'Authorization': 'Bearer $_apiKey',
-        'User-Agent': 'NutriScan/2.1.2',
-      }));
-      if (response.statusCode == 200) {
-        final content = _extractContentFromResponse(response.data);
-        final jsonStart = content.indexOf('[');
-        final jsonEnd = content.lastIndexOf(']') + 1;
-        if (jsonStart != -1 && jsonEnd > jsonStart) {
-          return (json.decode(content.substring(jsonStart, jsonEnd)) as List).cast<Map<String, dynamic>>();
-        }
+      final data = await _callAi(requestBody);
+      final content = _extractContentFromResponse(data);
+      final jsonStart = content.indexOf('[');
+      final jsonEnd = content.lastIndexOf(']') + 1;
+      if (jsonStart != -1 && jsonEnd > jsonStart) {
+        return (json.decode(content.substring(jsonStart, jsonEnd)) as List).cast<Map<String, dynamic>>();
       }
-      throw Exception("Failed to fetch insights");
+      throw Exception(getLocalizedErrorMessage('parse_error', language));
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('groqChatCompletion error in fetchInsights: ${e.code}');
+      throw Exception(_messageForCallableError(e, language));
     } catch (e) {
       debugPrint('Error in fetchInsights: $e');
       rethrow;
@@ -653,11 +600,11 @@ $_mealPlanJsonSchema''';
     try {
       final messages = [{"role": "system", "content": _getHealthCoachSystemPrompt(language, userContext)}];
       messages.addAll(history.map((m) => {"role": m.role == MessageRole.user ? "user" : "assistant", "content": m.content}));
-      final response = await _dio.post(_baseUrl, data: {"model": _model, "messages": messages}, options: Options(headers: {
-        'Authorization': 'Bearer $_apiKey',
-        'User-Agent': 'NutriScan/2.1.2',
-      }));
-      return _extractContentFromResponse(response.data);
+      final data = await _callAi({"model": _model, "messages": messages});
+      return _extractContentFromResponse(data);
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('groqChatCompletion error in getHealthCoachResponse: ${e.code}');
+      throw Exception(_messageForCallableError(e, language));
     } catch (e) {
       debugPrint('Error in getHealthCoachResponse: $e');
       rethrow;

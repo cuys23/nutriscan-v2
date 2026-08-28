@@ -1,32 +1,17 @@
 class ApiConfig {
-  // API key and model moved server-side in the original project, but for
-  // NutriScan 2 we use OpenRouter directly from the client.
-  static const String _envApiKey = String.fromEnvironment('GROQ_API_KEY');
+  // The OpenRouter API key and base URL used to live here and shipped inside
+  // the client binary. They moved server-side into the `groqChatCompletion`
+  // Cloud Function (functions/src/index.ts) so the real key is never in the
+  // app and every AI call is authenticated and rate-limited per user.
 
-  // Hardcoded fallback key (OpenRouter)
-  static const String _fallbackApiKey =
-      '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';
+  /// Model id used for every AI call — vision (food validation, food
+  /// analysis) and text (meal plan, insights, health coach) alike.
+  ///
+  /// Must be a vision-capable model: the scan path sends `image_url` content
+  /// parts, which a text-only model rejects. `qwen/qwen3-8b` is text-only on
+  /// OpenRouter and would break every scan.
+  static const String groqModel = 'qwen/qwen3.8-flash';
 
-  static String get groqApiKey {
-    if (_envApiKey.isNotEmpty) return _envApiKey;
-    return _fallbackApiKey;
-  }
-
-  /// Returns true if the API key is properly configured
-  static bool get isApiKeyConfigured {
-    final key = groqApiKey;
-    return key.isNotEmpty &&
-        key != 'YOUR_GROQ_API_KEY_HERE' &&
-        key.length > 10;
-  }
-
-  // Model: Qwen 3.8 Flash via OpenRouter
-  static const String groqModel = 'qwen/qwen3-8b';
-
-  // Bump whenever VisionAiService's food-analysis prompt changes materially
+  // Bump whenever the food-analysis prompt changes materially.
   static const String scanPromptVersion = 'scan_v2';
-
-  // OpenRouter API endpoint (compatible with OpenAI format)
-  static String get groqBaseUrl =>
-      'https://openrouter.ai/api/v1/chat/completions';
 }
