@@ -44,3 +44,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Harness core maintenance binary
+scripts/bin/harness
+scripts/bin/harness.exe
+
+# FVM Version Cache
+.fvm/
+# App Store Connect / Apple signing keys — must never be committed.
+# ios/SubscriptionKey_*.p8 was tracked from the initial commit and is public
+# in this repo's history; the key it contains has to be revoked in App Store
+# Connect, because removing it here does not remove it from published history.
+*.p8
