@@ -1,6 +1,6 @@
 {
   "name": "functions",
-  "description": "NutriScan Cloud Functions — Groq AI proxy and IAP receipt verification",
+  "description": "NutriScan Cloud Functions — OpenRouter AI proxy and IAP receipt verification",
   "engines": {
     "node": "22"
   },
