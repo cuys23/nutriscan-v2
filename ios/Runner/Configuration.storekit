@@ -85,13 +85,13 @@
           "localizations" : [
             {
               "description" : "Monthly access to all AI features",
-              "displayName" : "NutriSnap Premium Monthly",
+              "displayName" : "Monthly Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "premium_monthly",
+          "productID" : "com.vin.nourishshot_monthly_pro",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Monthly Subscription",
+          "referenceName" : "Monthly Pro",
           "subscriptionGroupID" : "NutriSnapSubscriptions",
           "type" : "RecurringSubscription"
         },
@@ -110,13 +110,13 @@
           "localizations" : [
             {
               "description" : "Yearly access to all AI features",
-              "displayName" : "NutriSnap Premium Yearly",
+              "displayName" : "Yearly Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "premium_yearly",
+          "productID" : "com.vin.nourishshot_yearly_pro",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Yearly Subscription",
+          "referenceName" : "Yearly Pro",
           "subscriptionGroupID" : "NutriSnapSubscriptions",
           "type" : "RecurringSubscription"
         }

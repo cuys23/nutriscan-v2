@@ -5,6 +5,6 @@ class AppConfig {
   static const String buildNumber = '1';
 
   // In-App Purchase Product IDs
-  static const String monthlySubscriptionId = 'premium_monthly';
-  static const String yearlySubscriptionId = 'premium_yearly';
+  static const String monthlySubscriptionId = 'com.vin.nourishshot_monthly_pro';
+  static const String yearlySubscriptionId = 'com.vin.nourishshot_yearly_pro';
 }
