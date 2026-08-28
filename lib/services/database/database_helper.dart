@@ -6,7 +6,12 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
-  final CloudBackupService _cloudBackupService = CloudBackupService();
+  // Lazy: CloudBackupService reaches for FirebaseFirestore.instance in its
+  // own constructor, so building it eagerly made `DatabaseHelper()` throw
+  // whenever Firebase was not initialised — including in tests that only
+  // want the local SQLite database. Only the premium auto-backup path in
+  // insertFood ever touches it.
+  late final CloudBackupService _cloudBackupService = CloudBackupService();
 
   factory DatabaseHelper() => _instance;
 
