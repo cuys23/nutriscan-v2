@@ -322,17 +322,35 @@ async function verifyAppleTransaction(
     { algorithm: "ES256", keyid: APPLE_KEY_ID.value() },
   );
 
-  // Production App Store Server API. Swap to the sandbox host
-  // (api.storekit-sandbox.itunes.apple.com) while testing with sandbox testers.
-  const response = await fetch(
-    `https://api.storekit.itunes.apple.com/inApps/v1/transactions/${transactionId}`,
-    { headers: { Authorization: `Bearer ${token}` } },
-  );
+  // A transaction lives in exactly one of the two App Store environments and
+  // the receipt does not say which, so Apple's documented approach is to ask
+  // production first and fall back to sandbox on 404. Hardcoding production —
+  // as this did — makes every sandbox and TestFlight purchase 404, which is
+  // precisely the case anyone testing IAP is in.
+  const hosts = [
+    "https://api.storekit.itunes.apple.com",
+    "https://api.storekit-sandbox.itunes.apple.com",
+  ];
 
-  if (!response.ok) {
+  let response: Response | undefined;
+  for (const host of hosts) {
+    response = await fetch(`${host}/inApps/v1/transactions/${transactionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.status !== 404) break;
+    logger.info("Transaction not in this App Store environment, trying next", {
+      host,
+      transactionId,
+    });
+  }
+
+  if (!response || !response.ok) {
+    // A 401 here almost always means the bundle id in the JWT is not an app
+    // this key can see — i.e. the app has not been created in App Store
+    // Connect yet — rather than a bad key.
     throw new HttpsError(
       "permission-denied",
-      `Apple transaction verification failed with status ${response.status}`,
+      `Apple transaction verification failed with status ${response?.status}`,
     );
   }
 
