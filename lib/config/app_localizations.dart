@@ -99,7 +99,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Are you sure you want to delete all food data for today?',
       'hello': 'Hello, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Clear Today\'s Data',
       'app_info_tooltip': 'App Info',
       'app_information': 'App Information',
@@ -341,7 +341,7 @@ class AppLocalizations {
       'skip_for_now': 'Skip for now',
       'login_failed': 'Login failed. Please try again.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'Cloud Backup',
@@ -812,7 +812,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'আপনি কি নিশ্চিত যে আজকের সব খাদ্য ডেটা মুছতে চান?',
       'hello': 'হ্যালো, 👋',
-      'calorie_tracker': 'নিউট্রিস্ক্যান',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'আজকের ডেটা মুছুন',
       'app_info_tooltip': 'অ্যাপ তথ্য',
       'app_information': 'অ্যাপ তথ্য',
@@ -930,7 +930,7 @@ class AppLocalizations {
       'splash_version': '২.১.২',
 
       // Login Screen
-      'welcome_to_nutriscan': 'নিউট্রিস্ক্যানে স্বাগতম',
+      'welcome_to_nutriscan': 'NutriScan-এ স্বাগতম',
       'login_description':
           'ক্লাউড ব্যাকআপ সক্রিয় করতে এবং আপনার সমস্ত ডিভাইস জুড়ে ডেটা সিঙ্ক করতে আপনার Google অ্যাকাউন্ট দিয়ে সাইন ইন করুন।',
       'sign_in_with_google': 'Google দিয়ে সাইন ইন করুন',
@@ -938,7 +938,7 @@ class AppLocalizations {
       'skip_for_now': 'এখনই এড়িয়ে যান',
       'login_failed': 'লগইন ব্যর্থ হয়েছে। দয়া করে আবার চেষ্টা করুন।',
       'google': 'গুগল',
-      'nutriscan': 'নিউট্রিস্ক্যান',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'ক্লাউড ব্যাকআপ',
@@ -1290,7 +1290,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'क्या आप निश्चित हैं कि आज के सभी खाद्य डेटा हटाना चाहते हैं?',
       'hello': 'नमस्ते, 👋',
-      'calorie_tracker': 'न्यूट्रिस्कैन',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'आज का डेटा साफ़ करें',
       'app_info_tooltip': 'ऐप की जानकारी',
       'app_information': 'ऐप की जानकारी',
@@ -1530,7 +1530,7 @@ class AppLocalizations {
       'splash_version': 'v2.1.2',
 
       // Login Screen
-      'welcome_to_nutriscan': 'न्यूट्रिस्कैन में आपका स्वागत है',
+      'welcome_to_nutriscan': 'NutriScan में आपका स्वागत है',
       'login_description':
           'क्लाउड बैकअप सक्षम करने और अपने सभी डिवाइस पर डेटा सिंक करने के लिए अपने Google खाते से साइन इन करें।',
       'sign_in_with_google': 'Google के साथ साइन इन करें',
@@ -1538,7 +1538,7 @@ class AppLocalizations {
       'skip_for_now': 'अभी के लिए छोड़ें',
       'login_failed': 'लॉगिन असफल। कृपया पुनः प्रयास करें।',
       'google': 'गूगल',
-      'nutriscan': 'न्यूट्रिस्कैन',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'क्लाउड बैकअप',
@@ -2017,7 +2017,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           '¿Estás seguro de que quieres borrar todos los datos de alimentos de hoy?',
       'hello': '¡Hola, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Borrar Datos de Hoy',
       'app_info_tooltip': 'Información de la App',
       'app_information': 'Información de la App',
@@ -2144,7 +2144,7 @@ class AppLocalizations {
       'skip_for_now': 'Omitir por ahora',
       'login_failed': 'Error al iniciar sesión. Por favor, inténtalo de nuevo.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'Copia de Seguridad en la Nube',
@@ -2500,7 +2500,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Êtes-vous sûr de vouloir effacer toutes les données alimentaires d\'aujourd\'hui ?',
       'hello': 'Bonjour, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Effacer les Données d\'Aujourd\'hui',
       'app_info_tooltip': 'Informations de l\'App',
       'app_information': 'Informations de l\'App',
@@ -2756,7 +2756,7 @@ class AppLocalizations {
       'skip_for_now': 'Ignorer pour l\'instant',
       'login_failed': 'Échec de la connexion. Veuillez réessayer.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'Sauvegarde Cloud',
@@ -3119,7 +3119,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Sind Sie sicher, dass Sie alle heutigen Lebensmitteldaten löschen möchten?',
       'hello': 'Hallo, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Heutige Daten löschen',
       'app_info_tooltip': 'App-Informationen',
       'app_information': 'App-Informationen',
@@ -3376,7 +3376,7 @@ class AppLocalizations {
       'login_failed':
           'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'Cloud-Backup',
@@ -3731,7 +3731,7 @@ class AppLocalizations {
       'clear_todays_data': '清除今日数据',
       'clear_todays_data_description': '您确定要删除今天的所有食物数据吗？',
       'hello': '你好，👋',
-      'calorie_tracker': '营养扫描',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': '清除今日数据',
       'app_info_tooltip': '应用信息',
       'app_information': '应用信息',
@@ -3939,7 +3939,7 @@ class AppLocalizations {
       'skip_for_now': '暂时跳过',
       'login_failed': '登录失败。请重试。',
       'google': '谷歌',
-      'nutriscan': '营养扫描',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': '云备份',
@@ -4259,7 +4259,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Bugüne ait tüm yiyecek verilerini silmek istediğinizden emin misiniz?',
       'hello': 'Merhaba, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Bugünün Verilerini Temizle',
       'app_info_tooltip': 'Uygulama Bilgisi',
       'app_information': 'Uygulama Bilgisi',
@@ -4504,7 +4504,7 @@ class AppLocalizations {
       'skip_for_now': 'Şimdilik atla',
       'login_failed': 'Giriş başarısız. Lütfen tekrar deneyin.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'Bulut Yedekleme',
@@ -4835,7 +4835,7 @@ class AppLocalizations {
       'clear_todays_data': '오늘 데이터 지우기',
       'clear_todays_data_description': '오늘의 모든 음식 데이터를 삭제하시겠습니까?',
       'hello': '안녕하세요, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': '오늘 데이터 지우기',
       'app_info_tooltip': '앱 정보',
       'app_information': '앱 정보',
@@ -5043,7 +5043,7 @@ class AppLocalizations {
       'skip_for_now': '나중에 하기',
       'login_failed': '로그인 실패. 다시 시도하세요.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': '클라우드 백업',
       'signed_in': '로그인됨',
       'not_signed_in': '로그인되지 않음',
@@ -5342,7 +5342,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Apakah Anda yakin ingin menghapus semua data makanan untuk hari ini?',
       'hello': 'Halo, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Hapus Data Hari Ini',
       'app_info_tooltip': 'Info Aplikasi',
       'app_information': 'Informasi Aplikasi',
@@ -5579,7 +5579,7 @@ class AppLocalizations {
       'skip_for_now': 'Lewati untuk saat ini',
       'login_failed': 'Masuk gagal. Silakan coba lagi.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'Cadangan Cloud',
       'signed_in': 'Masuk',
       'not_signed_in': 'Belum Masuk',
@@ -5900,7 +5900,7 @@ class AppLocalizations {
       'clear_todays_data': '今日のデータを消去',
       'clear_todays_data_description': '今日のすべての食品データを削除してもよろしいですか？',
       'hello': 'こんにちは、👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': '今日のデータを消去',
       'app_info_tooltip': 'アプリ情報',
       'app_information': 'アプリ情報',
@@ -6105,7 +6105,7 @@ class AppLocalizations {
       'skip_for_now': '今はスキップ',
       'login_failed': 'ログインに失敗しました。もう一度お試しください。',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'クラウドバックアップ',
       'signed_in': 'サインイン済み',
       'not_signed_in': 'サインインしていません',
@@ -6404,7 +6404,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Вы уверены, что хотите удалить все данные о еде за сегодня?',
       'hello': 'Привет, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Очистить данные за сегодня',
       'app_info_tooltip': 'Информация о приложении',
       'app_information': 'Информация о приложении',
@@ -6641,7 +6641,7 @@ class AppLocalizations {
       'skip_for_now': 'Пропустить',
       'login_failed': 'Вход не выполнен. Попробуйте еще раз.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'Облачное резервное копирование',
       'signed_in': 'Вход выполнен',
       'not_signed_in': 'Не выполнен вход',
@@ -6969,7 +6969,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'کیا آپ واقعی آج کا تمام کھانے کا ڈیٹا حذف کرنا چاہتے ہیں؟',
       'hello': 'ہیلو، 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'آج کا ڈیٹا صاف کریں',
       'app_info_tooltip': 'ایپ کی معلومات',
       'app_information': 'ایپ کی معلومات',
@@ -7203,7 +7203,7 @@ class AppLocalizations {
       'skip_for_now': 'ابھی چھوڑیں',
       'login_failed': 'لاگ ان ناکام ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔',
       'google': 'گوگل',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'کلاؤڈ بیک اپ',
       'signed_in': 'سائن ان ہو گیا',
       'not_signed_in': 'سائن ان نہیں',
@@ -7525,7 +7525,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Tem certeza de que deseja excluir todos os dados de alimentos de hoje?',
       'hello': 'Olá, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Limpar Dados de Hoje',
       'app_info_tooltip': 'Informações do Aplicativo',
       'app_information': 'Informações do Aplicativo',
@@ -7762,7 +7762,7 @@ class AppLocalizations {
       'skip_for_now': 'Pular por agora',
       'login_failed': 'Falha no login. Por favor, tente novamente.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'Backup na Nuvem',
       'signed_in': 'Conectado',
       'not_signed_in': 'Não Conectado',
@@ -8090,7 +8090,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'Tem certeza de que deseja excluir todos os dados de alimentos de hoje?',
       'hello': 'Olá, 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'Limpar Dados de Hoje',
       'app_info_tooltip': 'Informações do Aplicativo',
       'app_information': 'Informações do Aplicativo',
@@ -8327,7 +8327,7 @@ class AppLocalizations {
       'skip_for_now': 'Pular por agora',
       'login_failed': 'Falha no login. Por favor, tente novamente.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
       'cloud_backup': 'Backup na Nuvem',
       'signed_in': 'Conectado',
       'not_signed_in': 'Não Conectado',
@@ -8663,7 +8663,7 @@ class AppLocalizations {
       'clear_todays_data_description':
           'هل أنت متأكد أنك تريد حذف جميع بيانات الطعام لليوم؟',
       'hello': 'مرحباً، 👋',
-      'calorie_tracker': 'NutriScan',
+      'calorie_tracker': 'NutriSnap',
       'clear_todays_data_tooltip': 'مسح بيانات اليوم',
       'app_info_tooltip': 'معلومات التطبيق',
       'app_information': 'معلومات التطبيق',
@@ -8903,7 +8903,7 @@ class AppLocalizations {
       'skip_for_now': 'تخطي الآن',
       'login_failed': 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
       'google': 'Google',
-      'nutriscan': 'NutriScan',
+      'nutriscan': 'NutriSnap',
 
       // Cloud Backup Screen
       'cloud_backup': 'النسخ الاحتياطي السحابي',
@@ -9144,6 +9144,233 @@ class AppLocalizations {
       'i_understand': 'مفهوم',
       'cancel': 'إلغاء',
     },
+    // Vietnamese. Partial by design: getString() falls back to 'en' for any
+    // key not listed, so this covers the screens a user actually walks
+    // through — scan, history, food detail, settings, login, account
+    // deletion, paywall, restore, coins/ads — rather than all 460 keys.
+    'vi': {
+      // Settings Screen
+      'settings': 'Cài đặt',
+      'app_settings': 'Cài đặt ứng dụng',
+      'dark_mode': 'Chế độ tối',
+      'dark_mode_subtitle': 'Chuyển giữa giao diện sáng và tối',
+      'language': 'Ngôn ngữ',
+      'language_subtitle': 'Chọn ngôn ngữ bạn muốn dùng',
+      'data_privacy': 'Dữ liệu & Quyền riêng tư',
+      'clear_all_data': 'Xoá toàn bộ dữ liệu',
+      'clear_all_data_subtitle': 'Xoá toàn bộ lịch sử món ăn và cài đặt',
+      'clear_all_data_description':
+          'Hành động này không thể hoàn tác. Toàn bộ lịch sử món ăn và cài đặt của bạn sẽ bị xoá vĩnh viễn.',
+      'clear_all': 'Xoá tất cả',
+      'logout': 'Đăng xuất',
+      'logout_subtitle': 'Đăng xuất khỏi tài khoản của bạn',
+      'logout_title': 'Đăng xuất',
+      'logout_description':
+          'Bạn có chắc muốn đăng xuất không? Bạn sẽ cần đăng nhập lại để dùng tính năng sao lưu đám mây.',
+      'about': 'Giới thiệu',
+      'privacy_policy': 'Chính sách bảo mật',
+      'privacy_policy_subtitle': 'Đọc chính sách bảo mật của chúng tôi',
+      'terms_of_service': 'Điều khoản dịch vụ',
+      'terms_of_service_subtitle': 'Đọc các điều khoản và điều kiện',
+      'app_version': 'Phiên bản ứng dụng',
+      'notification_settings': 'Cài đặt thông báo',
+      'notification_settings_subtitle':
+          'Nhắc bữa ăn, tiến độ hằng ngày/tuần và cảnh báo',
+      'meal_plan': 'Thực đơn',
+      'meal_plan_settings_title': 'Thực đơn',
+      'meal_plan_settings_subtitle': 'Tạo thực đơn phù hợp với mục tiêu của bạn',
+
+      // Account Deletion
+      'delete_account': 'Xoá tài khoản',
+      'delete_account_subtitle': 'Xoá vĩnh viễn tài khoản và dữ liệu của bạn',
+      'delete_account_description':
+          'Thao tác này sẽ xoá vĩnh viễn tài khoản và toàn bộ dữ liệu liên quan. Không thể hoàn tác.',
+      'delete_account_confirm_hint': 'Nhập DELETE để xác nhận',
+      // Giữ nguyên chữ tiếng Anh để khớp với delete_account_confirm_hint.
+      'delete_account_confirm_word': 'DELETE',
+      'delete_account_button': 'Xoá tài khoản của tôi',
+      'delete_account_requires_login':
+          'Vui lòng đăng nhập lại trước khi xoá tài khoản để xác minh bảo mật.',
+      'delete_account_failed': 'Xoá tài khoản thất bại. Vui lòng thử lại.',
+      'delete_account_success': 'Tài khoản của bạn đã được xoá.',
+      'delete_account_purchase_note':
+          'Gói đăng ký của bạn sẽ không tự động bị huỷ. Vui lòng huỷ trong cài đặt thiết bị trước khi xoá tài khoản.',
+
+      // History Screen
+      'food_history': 'Lịch sử món ăn',
+      'loading': 'Đang tải...',
+      'search_foods': 'Tìm món ăn...',
+      'sort_by_date': 'Sắp xếp theo ngày',
+      'sort_by_name': 'Sắp xếp theo tên',
+      'sort_by_calories': 'Sắp xếp theo calo',
+      'total': 'Tổng',
+      'no_food_history': 'Chưa có lịch sử món ăn',
+      'no_foods_found': 'Không tìm thấy món ăn',
+      'no_history_subtitle': 'Thêm món ăn để xem toàn bộ lịch sử của bạn',
+      'clear_all_history': 'Xoá toàn bộ lịch sử',
+      'delete_all': 'Xoá tất cả',
+      'no_food_found': 'Không tìm thấy món ăn',
+      'start_adding_food': 'Hãy bắt đầu bằng cách thêm món ăn',
+
+      // Food detail
+      'score': 'Điểm',
+      'description': 'Mô tả',
+      'no_description_available': 'Không có mô tả',
+      'nutrition': 'Dinh dưỡng',
+      'calories': 'Calo',
+      'protein': 'Chất đạm',
+      'carbs': 'Tinh bột',
+      'fat': 'Chất béo',
+      'fiber': 'Chất xơ',
+      'sugar': 'Đường',
+      'sodium': 'Natri',
+      'health_benefits': 'Lợi ích sức khoẻ',
+      'health_warnings': 'Cảnh báo sức khoẻ',
+      'serving_size': 'Khẩu phần',
+      'date': 'Ngày',
+      'delete_food': 'Xoá món ăn',
+      'delete_food_description': 'Bạn có chắc muốn xoá',
+
+      // Home / scan
+      'hello': 'Xin chào, 👋',
+      'todays_food': 'Món ăn hôm nay',
+      'todays_nutrition': 'Dinh dưỡng hôm nay',
+      'no_food_today': 'Hôm nay chưa thêm món ăn nào',
+      'start_with_photo': 'Bắt đầu bằng cách chụp ảnh món ăn',
+      'choose_method': 'Chọn cách chụp',
+      'select_scan_method': 'Chọn cách bạn muốn quét món ăn',
+      'camera': 'Máy ảnh',
+      'take_photo': 'Chụp ảnh',
+      'gallery': 'Thư viện',
+      'choose_existing': 'Chọn ảnh có sẵn',
+      'camera_error': 'Lỗi máy ảnh',
+      'gallery_error': 'Lỗi thư viện ảnh',
+      'scanning': 'Đang quét...',
+      'scanning_food_image': 'Đang phân tích ảnh món ăn của bạn...',
+      'please_wait': 'Vui lòng đợi',
+      'home': 'Trang chủ',
+      'history': 'Lịch sử',
+      'track_nutrition_journey': 'Theo dõi hành trình dinh dưỡng của bạn',
+      'preparing_app': 'Đang chuẩn bị ứng dụng...',
+
+      // Errors
+      'try_again': 'Thử lại',
+      'internet_check':
+          'Nếu vấn đề vẫn tiếp diễn, vui lòng kiểm tra kết nối internet của bạn',
+      'oops_something_went_wrong': 'Rất tiếc! Đã có lỗi xảy ra',
+      'loading_error_title':
+          'Đã xảy ra sự cố khi tải dữ liệu của bạn. Nguyên nhân có thể là:',
+      'internet_connection_problem': 'Sự cố kết nối internet',
+      'server_unavailable': 'Máy chủ tạm thời không khả dụng',
+      'app_configuration_issue': 'Sự cố cấu hình ứng dụng',
+
+      // Login Screen
+      'welcome_to_nutriscan': 'Chào mừng đến với NutriScan',
+      'login_description':
+          'Đăng nhập để bật sao lưu đám mây và đồng bộ dữ liệu trên mọi thiết bị của bạn.',
+      'sign_in_with_google': 'Đăng nhập bằng Google',
+      'sign_in_with_apple': 'Đăng nhập bằng Apple',
+      'signing_in': 'Đang đăng nhập...',
+      'skip_for_now': 'Bỏ qua',
+      'login_failed': 'Đăng nhập thất bại. Vui lòng thử lại.',
+
+      // Cloud Backup
+      'cloud_backup': 'Sao lưu đám mây',
+      'signed_in': 'Đã đăng nhập',
+      'not_signed_in': 'Chưa đăng nhập',
+      'premium_badge': 'PREMIUM',
+      'premium': 'Premium',
+      'backing_up': 'Đang sao lưu...',
+      'backup_to_cloud': 'Sao lưu lên đám mây',
+      'restoring': 'Đang khôi phục...',
+      'restore_from_cloud': 'Khôi phục từ đám mây',
+      'restore_data': 'Khôi phục dữ liệu',
+      'restore_data_warning':
+          'Thao tác này sẽ thay thế toàn bộ dữ liệu hiện tại bằng dữ liệu từ bản sao lưu đám mây. Không thể hoàn tác.',
+      'restore': 'Khôi phục',
+
+      // Subscription / paywall
+      'subscription': 'Gói đăng ký',
+      'premium_subscription': 'Gói Premium',
+      'unlock_premium': 'Mở khoá Premium',
+      'premium_description': 'Tắt quảng cáo và mở khoá mọi tính năng Premium',
+      'choose_plan': 'Chọn gói của bạn',
+      'popular': 'Phổ biến',
+      'premium_features': 'Tính năng Premium',
+      'unlimited_scans': 'Quét món ăn không giới hạn',
+      'no_ads': 'Không quảng cáo',
+      'advanced_insights': 'Phân tích dinh dưỡng nâng cao',
+      'export_data': 'Xuất dữ liệu của bạn',
+      'priority_support': 'Hỗ trợ ưu tiên',
+      'subscribe_now': 'Đăng ký ngay',
+      'subscribe_now_button': 'Đăng ký ngay',
+      'premium_active': 'Premium đang hoạt động',
+      'manage_subscription': 'Quản lý gói đăng ký',
+      'remove_ads_unlock_features': 'Tắt quảng cáo và mở khoá mọi tính năng',
+      'upgrade_to_premium': 'Nâng cấp lên Premium',
+      'upgrade_now': 'Nâng cấp ngay',
+      'monthly_plan': 'Gói hàng tháng',
+      'yearly_plan': 'Gói hàng năm',
+      'billed_monthly': 'Thanh toán hàng tháng • Huỷ bất cứ lúc nào',
+      'billed_annually': 'Thanh toán hàng năm • Tiết kiệm 17% • Đáng giá nhất',
+      'best_value': 'ĐÁNG GIÁ NHẤT',
+      'subscription_successful':
+          'Đăng ký thành công! Chào mừng bạn đến với Premium!',
+      'subscription_error': 'Đăng ký thất bại, vui lòng thử lại',
+      'cancel_subscription': 'Huỷ gói đăng ký',
+      'keep_subscription': 'Giữ gói đăng ký',
+      'maybe_later_button': 'Để sau',
+
+      // Coins & rewarded ads
+      'watch_ad_for_rewards': 'Xem quảng cáo nhận thưởng',
+      'remaining_today': 'Còn lại hôm nay',
+      'loading_ad': 'Đang tải quảng cáo...',
+      'reward_earned': 'Đã nhận thưởng!',
+      'reward_earned_description':
+          'Cảm ơn bạn đã xem! Phần thưởng đã được cộng vào tài khoản.',
+      'ad_not_available': 'Quảng cáo chưa sẵn sàng',
+      'ad_not_available_description':
+          'Vui lòng thử lại sau. Quảng cáo có thể mất một lúc để tải.',
+      'ad_for_rewards': 'Quảng cáo nhận thưởng',
+      'ad_for_rewards_subtitle': 'Xem quảng cáo để nhận xu',
+      'your_coins': 'Xu của bạn',
+      'earn_coins': 'Nhận xu',
+      'watch_ad_earn_coins': 'Xem quảng cáo',
+      'coins_earned': 'Đã nhận xu!',
+      'you_earned_coins': 'Bạn đã nhận được {amount} xu!',
+      'coin_balance': 'Số dư xu',
+      'coins': 'Xu',
+      'coin': 'Xu',
+      'not_enough_coins': 'Không đủ xu',
+      'not_enough_coins_description':
+          'Xem quảng cáo để nhận thêm xu và tiếp tục quét món ăn.',
+      'scan_costs': 'Mỗi lần quét tốn {amount} xu',
+      'scan_costs_plural': 'Mỗi lần quét tốn {amount} xu',
+
+      // Health coach
+      'health_coach_title': 'Huấn luyện viên sức khoẻ',
+      'chat_placeholder': 'Hỏi huấn luyện viên sức khoẻ...',
+      'coach_welcome':
+          'Xin chào! Tôi là huấn luyện viên sức khoẻ AI của bạn. Hôm nay tôi có thể giúp gì cho bạn?',
+      'typing': 'Huấn luyện viên đang soạn...',
+
+      // Store setup
+      'store_setup_required': 'Cần thiết lập cửa hàng',
+      'i_understand': 'Tôi đã hiểu',
+      'got_it': 'Đã hiểu!',
+
+      // Common
+      'free': 'miễn phí',
+      'delete': 'Xoá',
+      'clear': 'Xoá',
+      'close': 'Đóng',
+      'ok': 'OK',
+      'cancel': 'Huỷ',
+      'cancel_btn': 'Huỷ',
+      'yes': 'Có',
+      'no': 'Không',
+      'vietnamese': 'Tiếng Việt',
+    },
   };
 
   static String getString(String key, String languageCode) {
@@ -9152,24 +9379,4 @@ class AppLocalizations {
         key;
   }
 
-  static Map<String, String> getLanguageNames() {
-    return {
-      'en': _localizedValues['en']!['english']!,
-      'bn': _localizedValues['bn']!['bangla']!,
-      'hi': _localizedValues['hi']!['hindi']!,
-      'es': _localizedValues['es']!['spanish']!,
-      'fr': _localizedValues['fr']!['french']!,
-      'de': _localizedValues['de']!['german']!,
-      'zh': _localizedValues['zh']!['chinese']!,
-      'tr': _localizedValues['tr']!['turkish']!,
-      'ko': _localizedValues['ko']!['korean']!,
-      'id': _localizedValues['id']!['indonesian']!,
-      'ja': _localizedValues['ja']!['japanese']!,
-      'ru': _localizedValues['ru']!['russian']!,
-      'ur': _localizedValues['ur']!['urdu']!,
-      'pt': _localizedValues['pt']!['portuguese']!,
-      'pt-BR': _localizedValues['pt-BR']!['brazilian_portuguese']!,
-      'ar': _localizedValues['ar']!['arabic']!,
-    };
-  }
 }

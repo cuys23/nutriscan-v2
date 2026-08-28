@@ -18,9 +18,40 @@ class DatabaseHelper {
     return _database!;
   }
 
+  /// Bump by one for every shipped schema change and add the matching
+  /// `case` to [_onUpgrade]. Opening an existing database whose version is
+  /// higher than this throws, so never lower it.
+  static const int _databaseVersion = 1;
+
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'calories.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
+  }
+
+  /// Runs every migration step between the installed version and
+  /// [_databaseVersion], so a user upgrading across several releases at once
+  /// gets each step in order. Registered now, while there is nothing to
+  /// migrate, because without an onUpgrade the first version bump opens an
+  /// old database against new code and crashes on the missing column.
+  ///
+  /// To add one: bump [_databaseVersion] to N and add `case N:` running the
+  /// ALTER/CREATE that takes the schema from N-1 to N. No breaks — each case
+  /// falls through to the ones after it.
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    for (var version = oldVersion + 1; version <= newVersion; version++) {
+      switch (version) {
+        // case 2:
+        //   await db.execute('ALTER TABLE foods ADD COLUMN source TEXT');
+        //   break;
+        default:
+          break;
+      }
+    }
   }
 
   Future<void> _onCreate(Database db, int version) async {

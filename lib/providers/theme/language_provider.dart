@@ -101,6 +101,7 @@ class LanguageProvider extends ChangeNotifier {
       {'code': 'tr', 'name': 'Turkish', 'nativeName': 'Türkçe'},
       {'code': 'ko', 'name': 'Korean', 'nativeName': '한국어'},
       {'code': 'id', 'name': 'Indonesian', 'nativeName': 'Bahasa Indonesia'},
+      {'code': 'vi', 'name': 'Vietnamese', 'nativeName': 'Tiếng Việt'},
       {'code': 'ja', 'name': 'Japanese', 'nativeName': '日本語'},
       {'code': 'ru', 'name': 'Russian', 'nativeName': 'Русский'},
       {'code': 'ur', 'name': 'Urdu', 'nativeName': 'اردو'},

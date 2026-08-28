@@ -427,6 +427,7 @@ Rules:
       case 'tr': return 'Turkish';
       case 'ko': return 'Korean';
       case 'id': return 'Indonesian';
+      case 'vi': return 'Vietnamese';
       case 'ja': return 'Japanese';
       case 'ru': return 'Russian';
       case 'ur': return 'Urdu';
